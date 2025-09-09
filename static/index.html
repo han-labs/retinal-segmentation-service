@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retinal Vessel Segmentation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f7f6;
+            margin: 2rem 0;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 900px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .upload-area:hover {
+            background-color: #fafafa;
+            border-color: #3498db;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .sample-images {
+            margin-bottom: 1.5rem;
+        }
+
+        .sample-images h3 {
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .sample-images img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .sample-images img:hover {
+            transform: scale(1.1);
+            border-color: #3498db;
+        }
+
+        .results {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .image-box {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .image-box h3 {
+            margin-top: 0;
+            color: #555;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            height: auto;
+            max-height: 300px;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+            display: none;
+        }
+
+        .download-btn {
+            display: none;
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+            text-decoration: none;
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>AI-Powered Retinal Vessel Segmentation</h1>
+        <p>Upload a retinal image or select one of our samples to see the segmented blood vessels.</p>
+
+        <div class="sample-images">
+            <h3>Try a Sample</h3>
+            <img src="https://i.imgur.com/eFw2n98.jpg" alt="Sample 1" class="sample-img" crossorigin="anonymous">
+            <img src="https://i.imgur.com/xTj6S6Z.jpg" alt="Sample 2" class="sample-img" crossorigin="anonymous">
+            <img src="https://i.imgur.com/o7zPCaa.jpg" alt="Sample 3" class="sample-img" crossorigin="anonymous">
+        </div>
+
+        <label for="file-input" class="upload-area" id="upload-label">
+            Click or Drag & Drop an Image Here
+        </label>
+        <input type="file" id="file-input" accept="image/*">
+
+        <div class="loader" id="loader"></div>
+
+        <div class="results" id="results-container">
+            <div class="image-box" id="original-box" style="display:none;">
+                <h3>Original Image</h3>
+                <img id="original-image" src="#" alt="Original Image">
+            </div>
+            <div class="image-box" id="result-box" style="display:none;">
+                <h3>Segmented Vessels</h3>
+                <img id="result-image" src="#" alt="Result Image">
+                <a href="#" id="download-link" class="download-btn" download="segmented_result.png">Download Result</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const uploadArea = document.getElementById('upload-label');
+        const loader = document.getElementById('loader');
+        const originalBox = document.getElementById('original-box');
+        const resultBox = document.getElementById('result-box');
+        const originalImage = document.getElementById('original-image');
+        const resultImage = document.getElementById('result-image');
+        const downloadLink = document.getElementById('download-link');
+        const sampleImages = document.querySelectorAll('.sample-img');
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                handleFileUpload(file);
+            }
+        });
+
+        uploadArea.addEventListener('dragover', (e) => e.preventDefault());
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                handleFileUpload(file);
+            }
+        });
+
+        sampleImages.forEach(img => {
+            img.addEventListener('click', async () => {
+                // Fetch the image from the URL, convert to blob, then to file
+                const response = await fetch(img.src);
+                const blob = await response.blob();
+                const file = new File([blob], "sample.jpg", { type: blob.type });
+                handleFileUpload(file);
+            });
+        });
+
+        async function handleFileUpload(file) {
+            originalImage.src = URL.createObjectURL(file);
+            originalBox.style.display = 'block';
+            resultBox.style.display = 'none';
+            downloadLink.style.display = 'none';
+
+            loader.style.display = 'block';
+            uploadArea.style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/predict/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const imageBlob = await response.blob();
+                const resultUrl = URL.createObjectURL(imageBlob);
+                resultImage.src = resultUrl;
+                downloadLink.href = resultUrl; // Set download link URL
+                resultBox.style.display = 'block';
+                downloadLink.style.display = 'inline-block';
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during prediction: ' + error.message);
+            } finally {
+                loader.style.display = 'none';
+                uploadArea.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>
