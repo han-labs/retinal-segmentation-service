@@ -82,7 +82,7 @@ The application will be running at `http://127.0.0.1:8000`.
 
 * **Huynh Gia Han**
     * GitHub: [@han-labs](https://github.com/han-labs)
-    * LinkedIn: [linkedin-huynh-gia-han]`www.linkedin.com/in/huynh-gia-han`
+    * LinkedIn: [linkedin-huynh-gia-han](www.linkedin.com/in/huynh-gia-han)
 
 ### License
 
