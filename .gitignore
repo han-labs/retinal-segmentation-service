@@ -1,3 +1,10 @@
+# Virtual Environment
 venv/
-# .gitignore
-*.pth
+.venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+
+# IDE / Editor specific files
+.vscode/
