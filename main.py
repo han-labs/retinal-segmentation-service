@@ -39,6 +39,4 @@ async def predict_image(file: UploadFile = File(...)):
     is_success, img_encoded = cv2.imencode(".png", result_image_np)
     if not is_success:
         return {"error": "Could not encode image"}, 500
-
-    # Trả về file PNG cho người dùng
     return StreamingResponse(io.BytesIO(img_encoded.tobytes()), media_type="image/png")

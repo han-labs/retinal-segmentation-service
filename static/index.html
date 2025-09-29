@@ -5,95 +5,433 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RetinaSeg - AI Vessel Segmentation</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        /* CSS tùy chỉnh để tạo box upload có viền đứt nét */
-        .upload-box {
-            border: 3px dashed #adb5bd;
-            border-radius: 1rem;
-            padding: 4rem 2rem;
-            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-            cursor: pointer;
-        }
-
-        .upload-box:hover {
-            background-color: #e9ecef;
-            border-color: #0d6efd;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
 <body>
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="processing-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                <strong class="me-auto">RetinaSeg.AI</strong>
+                <small>Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Your image is being processed by the AI model. Please wait...
+            </div>
+        </div>
+    </div>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="#">
-                <i class="bi bi-eye-fill"></i>
-                RetinaSeg
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <a class="navbar-brand fw-bold text-primary" href="#"><i class="bi bi-eye-fill"></i> RetinaSeg</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#features">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#how-to-use">How To Use</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#faq">FAQ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://github.com/han-labs/retinal-segmentation-service"
-                            target="_blank" title="View Source Code">
-                            <i class="bi bi-github"></i> GitHub
-                        </a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-to-use">How To Use</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                            href="https://github.com/han-labs/retinal-segmentation-service" target="_blank"
+                            title="View Source Code"><i class="bi bi-github"></i> GitHub</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <main class="container my-5">
+
         <div class="text-center">
+
+
             <h1 class="display-4 fw-bold">Analyze Retinal Images with AI</h1>
-            <p class="lead text-muted col-lg-8 mx-auto">
-                Powered by a U-Net++ model, RetinaSeg can precisely segment blood vessels from your retinal images.
-                Enhance your analysis with state-of-the-art deep learning technology.
-            </p>
+            <p class="lead text-muted col-lg-8 mx-auto">Powered by a hybrid model - Unet++ and EfficientNet-B4,
+                RetinaSeg can precisely segment
+                blood vessels from your retinal images. Enhance your analysis with state-of-the-art deep learning
+                technology.</p>
         </div>
 
-        <div class="row justify-content-center mt-5">
-            <div class="col-lg-10">
+        <div class="row justify-content-center mt-5 g-3">
+
+            <!-- Sample images section - left side with 2x2 grid -->
+            <div class="col-lg-4 col-md-5">
+                <!-- Disclaimer moved to top and made compact -->
+                <div class="alert alert-warning disclaimer-compact col-lg-10 mx-auto" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>Disclaimer:</strong> This is a web service for a research project and is
+                    <strong>not a medical diagnostic tool</strong>. Results should not be used for clinical decisions.
+                    Always consult a qualified healthcare professional.
+                </div>
+
+                <!-- THAY THẾ TOÀN BỘ PHẦN SAMPLE IMAGES BẰNG CODE NÀY -->
+                <!-- THAY THẾ TOÀN BỘ PHẦN SAMPLE IMAGES BẰNG CODE NÀY -->
+                <div class="sample-section"
+                    style="display: block; background: white; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 1rem; box-sizing: border-box;">
+                    <h5
+                        style="font-size: 0.85rem; margin: 0 0 12px 0; color: #6c757d; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui; font-weight: 400; line-height: 1.4; display: block;">
+                        Don't have an image? Try a sample:</h5>
+
+                    <div style="display: block; width: 100%; box-sizing: border-box;">
+                        <div style="display: block; width: 100%; margin-bottom: 8px; box-sizing: border-box;">
+                            <div
+                                style="width: 48%; display: inline-block; vertical-align: top; box-sizing: border-box; padding-right: 4px;">
+                                <img src="/static/images/03_test.png" alt="Sample 1"
+                                    style="width: 100%; height: 75px; border-radius: 0.4rem; border: 2px solid #ddd; cursor: pointer; display: block; object-fit: contain; background-color: #f8f9fa; transition: all 0.2s ease;"
+                                    onmouseover="this.style.borderColor='#0d6efd'; this.style.transform='scale(1.02)'"
+                                    onmouseout="this.style.borderColor='#ddd'; this.style.transform='scale(1)'">
+                            </div>
+                            <div
+                                style="width: 48%; display: inline-block; vertical-align: top; box-sizing: border-box; padding-left: 4px;">
+                                <img src="/static/images/04_test.png" alt="Sample 2"
+                                    style="width: 100%; height: 75px; border-radius: 0.4rem; border: 2px solid #ddd; cursor: pointer; display: block; object-fit: contain; background-color: #f8f9fa; transition: all 0.2s ease;"
+                                    onmouseover="this.style.borderColor='#0d6efd'; this.style.transform='scale(1.02)'"
+                                    onmouseout="this.style.borderColor='#ddd'; this.style.transform='scale(1)'">
+                            </div>
+                        </div>
+                        <div style="display: block; width: 100%; margin-bottom: 0; box-sizing: border-box;">
+                            <div
+                                style="width: 48%; display: inline-block; vertical-align: top; box-sizing: border-box; padding-right: 4px;">
+                                <img src="/static/images/01_test.jpg" alt="Sample 3"
+                                    style="width: 100%; height: 75px; border-radius: 0.4rem; border: 2px solid #ddd; cursor: pointer; display: block; object-fit: contain; background-color: #f8f9fa; transition: all 0.2s ease;"
+                                    onmouseover="this.style.borderColor='#0d6efd'; this.style.transform='scale(1.02)'"
+                                    onmouseout="this.style.borderColor='#ddd'; this.style.transform='scale(1)'">
+                            </div>
+                            <div
+                                style="width: 48%; display: inline-block; vertical-align: top; box-sizing: border-box; padding-left: 4px;">
+                                <img src="/static/images/02_test.jpg" alt="Sample 4"
+                                    style="width: 100%; height: 75px; border-radius: 0.4rem; border: 2px solid #ddd; cursor: pointer; display: block; object-fit: contain; background-color: #f8f9fa; transition: all 0.2s ease;"
+                                    onmouseover="this.style.borderColor='#0d6efd'; this.style.transform='scale(1.02)'"
+                                    onmouseout="this.style.borderColor='#ddd'; this.style.transform='scale(1)'">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Upload area - right side -->
+            <div class="col-lg-8 col-md-7">
                 <div class="upload-box text-center" id="upload-area">
-                    <input type="file" id="file-input" class="d-none" accept="image/jpeg, image/png, image/webp">
+                    <input type="file" id="file-input" class="d-none" accept="image/jpeg, image/png">
+                    <div id="upload-prompt">
+                        <button type="button" class="btn btn-primary btn-lg mb-3"><i class="bi bi-image"></i> Choose
+                            Image</button>
+                        <p class="text-muted mb-0">or drag and drop an image here</p>
+                        <p class="small text-muted mt-2">Allowed formats: JPG, PNG</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    <button type="button" class="btn btn-primary btn-lg mb-3">
-                        <i class="bi bi-image"></i> Choose Image
-                    </button>
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-10">
+                <div id="loading-indicator" class="processing-indicator d-none">
+                    <div class="spinner-border text-primary" role="status"><span
+                            class="visually-hidden">Loading...</span></div>
+                    <span class="text-primary fw-bold">Processing...</span>
+                </div>
 
-                    <p class="text-muted mb-0">or drag and drop an image here</p>
-                    <p class="small text-muted mt-2">Allowed formats: JPG, PNG</p>
+                <div id="results-area" class="d-none">
+                    <div id="finished-indicator" class="text-center my-4">
+                        <h3 class="text-success"><i class="bi bi-check-circle-fill"></i> Finished!</h3>
+                    </div>
+                    <div class="results-grid">
+                        <div class="image-box">
+                            <h4 class="text-center">Original Image</h4><img id="original-image" src="#" alt="Original"
+                                class="img-fluid">
+                        </div>
+                        <div class="image-box">
+                            <h4 class="text-center">Segmented Result</h4><img id="result-image" src="#" alt="Segmented"
+                                class="img-fluid">
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="#" id="download-link" class="btn btn-success btn-lg download-btn"
+                            download="segmented_result.png"><i class="bi bi-download"></i> Download Result</a>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <section id="features" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Core Technology & Features</h2>
+                <p class="text-muted">Discover the technology that powers RetinaSeg.</p>
+            </div>
+
+            <div class="text-center mb-5">
+                <img src="/static/images/image.png" alt="Before and after segmentation"
+                    class="img-fluid rounded shadow-sm" style="max-width: 700px;">
+                <p class="text-muted mt-2 fst-italic">High-fidelity segmentation results from the U-Net++ model.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100 text-center shadow-sm">
+                        <div class="card-body">
+                            <div class="feature-icon text-primary mb-3"><i class="bi bi-cpu-fill"></i></div>
+                            <h5 class="card-title fw-bold">Advanced AI Model</h5>
+                            <p class="card-text text-muted">Utilizes a state-of-the-art U-Net++ architecture with an
+                                EfficientNet-B4 backbone for superior performance.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100 text-center shadow-sm">
+                        <div class="card-body">
+                            <div class="feature-icon text-primary mb-3"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+                            <h5 class="card-title fw-bold">High-Resolution Processing</h5>
+                            <p class="card-text text-muted">Employs a patch-based inference strategy to accurately
+                                segment large, detailed medical images without downscaling.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100 text-center shadow-sm">
+                        <div class="card-body">
+                            <div class="feature-icon text-primary mb-3"><i class="bi bi-cloud-arrow-up-fill"></i></div>
+                            <h5 class="card-title fw-bold">Instant Web Results</h5>
+                            <p class="card-text text-muted">Delivers real-time segmentation through a modern FastAPI
+                                backend, making AI accessible via any browser.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100 text-center shadow-sm">
+                        <div class="card-body">
+                            <div class="feature-icon text-primary mb-3"><i class="bi bi-bullseye"></i></div>
+                            <h5 class="card-title fw-bold">High Accuracy</h5>
+                            <p class="card-text text-muted">Built upon a model trained with a rigorous 4-stage
+                                sequential process to achieve high-fidelity results.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-to-use" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">How It Works</h2>
+                <p class="text-muted">A simple 3-step process to get your results.</p>
+            </div>
+            <div class="row text-center g-4">
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <div class="feature-icon text-primary mb-3"><i class="bi bi-1-circle-fill"></i></div>
+                        <h5 class="fw-bold">Upload Your Image</h5>
+                        <p class="text-muted">Click the "Choose Image" button or simply drag and drop your retinal image
+                            into the designated area.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <div class="feature-icon text-primary mb-3"><i class="bi bi-2-circle-fill"></i></div>
+                        <h5 class="fw-bold">AI Processing</h5>
+                        <p class="text-muted">Our advanced AI model analyzes your image, identifying and segmenting the
+                            blood vessels in real-time.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <div class="feature-icon text-primary mb-3"><i class="bi bi-3-circle-fill"></i></div>
+                        <h5 class="fw-bold">View & Download</h5>
+                        <p class="text-muted">See the original and segmented images side-by-side and download the result
+                            for your analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Frequently Asked Questions</h2>
+                <p class="text-muted">Get answers to your questions about RetinaSeg.</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne">
+                                    What is RetinaSeg?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    RetinaSeg is an AI-powered web service that performs high-precision segmentation of
+                                    blood vessels in retinal fundus images. It's designed to assist in the analysis of
+                                    retinal health by providing clear visualizations of the vascular structure.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTwo">
+                                    What AI model is used?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    The service utilizes a state-of-the-art U-Net++ architecture with an EfficientNet-B4
+                                    backbone. The model was trained using a sophisticated 4-stage sequential training
+                                    pipeline on public datasets like DRIVE and HRF.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseThree">
+                                    What image formats are supported?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    You can upload images in standard formats such as JPG, PNG. The system is
+                                    designed to handle high-resolution color images.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseFour">
+                                    Is my data secure?
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Absolutely. Your privacy is a priority. Images are processed in-memory on the server
+                                    and are <strong>not</strong> stored or saved after the segmentation process is
+                                    complete. The
+                                    result is streamed directly back to your browser.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="footer" class="bg-dark text-white pt-5 pb-4" data-bs-theme="dark">
+        <div class="container text-center text-md-start">
+            <div class="row">
+                <div class="col-md-4 col-lg-5 mx-auto mt-3">
+                    <h4 class="text fw-bold text-primary">RetinaSeg.AI</h4>
+                    <p class="text-muted">
+                        An AI-powered web service for high-precision segmentation of retinal blood vessels, built with
+                        Python, FastAPI, and PyTorch.
+                    </p>
+                </div>
+                <div class="col-md-3 col-lg-2 mx-auto mt-3">
+                    <h6 class="text-uppercase fw-bold mb-4">Quick Links</h6>
+                    <p><a href="#features" class="text-reset">Features</a></p>
+                    <p><a href="#how-to-use" class="text-reset">How To Use</a></p>
+                    <p><a href="#faq" class="text-reset">FAQ</a></p>
+                </div>
+                <div class="col-md-5 col-lg-4 mx-auto mt-3">
+                    <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                    <p class="text-muted"><i class="bi bi-person-fill me-3"></i> Huynh Gia Han</p>
+                    <p class="text-muted"><i class="bi bi-envelope-fill me-3"></i> huynhgiahan680@gmail.com</p>
+                    <p class="text-muted"><i class="bi bi-linkedin me-3"></i> <a
+                            href="https://www.linkedin.com/in/huynh-gia-han"
+                            class="text-reset">linkedin.com/in/huynh-gia-han
+                        </a></p>
+                    <p class="text-muted"><i class="bi bi-github me-3"></i> <a
+                            href="https://github.com/han-labs/retinal-segmentation-service"
+                            class="text-reset">github.com/han-labs</a></p>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="d-flex flex-column flex-sm-row justify-content-between">
+                <div class="text-center text-sm-start">
+                    <p class="text-muted">&copy; 2025 RetinaSeg.AI. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const uploadPrompt = document.getElementById('upload-prompt');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const resultsArea = document.getElementById('results-area');
+        const finishedIndicator = document.getElementById('finished-indicator');
+        const originalImage = document.getElementById('original-image');
+        const resultImage = document.getElementById('result-image');
+        const downloadLink = document.getElementById('download-link');
+        const toastEl = document.getElementById('processing-toast');
+        const toast = new bootstrap.Toast(toastEl);
+
+        // Sample images click handler
+        const sampleImages = document.querySelectorAll('.sample-img');
+        sampleImages.forEach(img => {
+            img.addEventListener('click', async () => {
+                try {
+                    const response = await fetch(img.src);
+                    const blob = await response.blob();
+                    const file = new File([blob], "sample.jpg", { type: blob.type });
+                    handleFile(file);
+                } catch (error) {
+                    console.error("Error fetching sample image:", error);
+                    alert("Could not load the sample image. Please try another one.");
+                }
+            });
+        });
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('border-primary'); });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('border-primary'));
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('border-primary');
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        async function handleFile(file) {
+            if (!file) return;
+            resultsArea.classList.add('d-none');
+            uploadPrompt.classList.add('d-none');
+            loadingIndicator.classList.remove('d-none');
+            toast.show();
+            originalImage.src = URL.createObjectURL(file);
+            const formData = new FormData();
+            formData.append('file', file);
+            try {
+                const response = await fetch('/predict/', { method: 'POST', body: formData });
+                if (!response.ok) throw new Error(`Server error: ${response.statusText}`);
+                const imageBlob = await response.blob();
+                const resultUrl = URL.createObjectURL(imageBlob);
+                resultImage.src = resultUrl;
+                downloadLink.href = resultUrl;
+                resultsArea.classList.remove('d-none');
+                resultsArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing the image.');
+            } finally {
+                loadingIndicator.classList.add('d-none');
+                uploadPrompt.classList.remove('d-none');
+            }
+        }
+    </script>
 </body>
 
 </html>
