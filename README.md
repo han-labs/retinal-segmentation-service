@@ -1,14 +1,16 @@
 # RetinaSeg: AI-Powered Retinal Vessel Segmentation
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green?logo=fastapi&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-orange?logo=pytorch&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.116.1-green?logo=fastapi&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.8.0-orange?logo=pytorch&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-4.12-blueviolet?logo=opencv&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple?logo=bootstrap&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An AI-as-a-Service application that performs high-precision segmentation of blood vessels in retinal fundus images. This project transforms a complex scientific research model into a real-time, interactive web service.
 
-**Live Demo:** `[LINK-TO-YOUR-DEPLOYED-APP-HERE]` *(Bạn sẽ điền link sau khi chúng ta deploy)*
+**Live Demo:** `[LINK-TO-YOUR-DEPLOYED-APP-HERE]` 
 
 ---
 
@@ -23,19 +25,20 @@ An AI-as-a-Service application that performs high-precision segmentation of bloo
 
 ### Technology Stack
 
-| Frontend | Backend | AI/ML | Deployment |
-| :--- |:--- |:--- |:--- |
-| HTML5 | Python 3.11 | PyTorch | Docker |
-| CSS3 | FastAPI | OpenCV | Ubuntu Server |
-| JavaScript (ES6) | Uvicorn | Albumentations | Git / GitHub |
-| Bootstrap 5 | | | |
+The project is built with a modern, robust technology stack suitable for deploying AI models as a web service.
+
+| Category | Technology |
+| :--- | :--- |
+| **Backend** | Python 3.11, FastAPI, Uvicorn |
+| **AI / Data Processing** | PyTorch, OpenCV, Albumentations, Numpy |
+| **Frontend** | HTML5, CSS3, JavaScript (ES6), Bootstrap 5 |
+| **DevOps & Infrastructure** | Docker, Ubuntu, Git / GitHub |
 
 ### Segmentation in Action
 
 Here is an example of the model's high-fidelity segmentation capability.
 
 ![Before and After Segmentation](/static/images/image.png)
-*(Lưu ý: Đường dẫn này hoạt động khi xem trên web, nhưng để GitHub hiển thị, bạn cần đảm bảo ảnh đã được đẩy lên repo)*
 
 ---
 
@@ -49,7 +52,7 @@ To run this project on your local machine, follow these steps:
 
 **1. Clone the repository:**
 ```bash
-git clone [https://github.com/han-labs/retinal-segmentation-service.git](https://github.com/han-labs/retinal-segmentation-service.git)
+git clone https://github.com/han-labs/retinal-segmentation-service.git
 cd retinal-segmentation-service
 ```
 
@@ -79,7 +82,7 @@ The application will be running at `http://127.0.0.1:8000`.
 
 * **Huynh Gia Han**
     * GitHub: [@han-labs](https://github.com/han-labs)
-    * LinkedIn: `[LINK-TO-YOUR-LINKEDIN-PROFILE]`
+    * LinkedIn: [linkedin-huynh-gia-han]`www.linkedin.com/in/huynh-gia-han`
 
 ### License
 
