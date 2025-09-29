@@ -5,8 +5,9 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Cài đặt các dependencies hệ thống cần thiết cho OpenCV
+# Thay thế bằng dòng này
 RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
+    libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
