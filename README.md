@@ -10,8 +10,6 @@
 
 An AI-as-a-Service application that performs high-precision segmentation of blood vessels in retinal fundus images. This project transforms a complex scientific research model into a real-time, interactive web service.
 
-**Live Demo:** `[LINK-TO-YOUR-DEPLOYED-APP-HERE]` 
-
 ---
 
 ### Key Features
